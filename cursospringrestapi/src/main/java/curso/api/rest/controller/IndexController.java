@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -56,15 +57,7 @@ public class IndexController {
 				.orElse(ResponseEntity.notFound().build());
 	}
 
-	@GetMapping(value = "/relatoriopdf/{id}")
-	public ResponseEntity<Usuario> relatorio(@PathVariable Long id) {
 
-		// retorna optional
-		Optional<Usuario> usuario = usuarioRepository.findById(id);
-
-		// o retorno seria um relatorio
-		return new ResponseEntity<Usuario>(usuario.get(), HttpStatus.OK);
-	}
 	
 	@GetMapping(value = "/metodoalex/{id}")
 	public ResponseEntity<Usuario> poridAlex(@PathVariable Long id) {
@@ -117,5 +110,17 @@ public class IndexController {
 		//ou return new ResponseEntity<Usuario>(Usuariosalvo, HttpStatus.OK);
  
 
+	}
+	/*               Métodos de Deletar os usuarios       */
+	@DeleteMapping("/{id}")
+	public ResponseEntity<Void> remover (@PathVariable Long id) {
+		
+		if(!usuarioRepository.existsById(id)) {
+			return ResponseEntity.notFound().build();
+		}
+		
+		usuarioRepository.deleteById(id);
+		
+		return ResponseEntity.noContent().build();
 	}
 }
