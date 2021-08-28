@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
 import curso.api.rest.model.Usuario;
 import curso.api.rest.repository.UsuarioRepository;
@@ -93,6 +92,10 @@ public class IndexController {
 		}
 		
 		usuario.setId(id); //força o usuario a ser atualizado na api
+		
+		for(int pos = 0; pos < usuario.getTelefones().size(); pos++) {
+	     	   usuario.getTelefones().get(pos).setUsuario(usuario); 
+	        }
 
 		Usuario UsuarioAtualizar= usuarioRepository.save(usuario);
 
@@ -101,6 +104,8 @@ public class IndexController {
  
 
 	}
+	
+	
 	/*               Métodos de Deletar os usuarios       */
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> remover (@PathVariable Long id) {

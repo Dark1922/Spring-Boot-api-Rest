@@ -10,6 +10,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -28,11 +31,22 @@ public class Usuario  implements Serializable{
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	
+	@NotBlank
+	@Size(max = 60, min = 6)
 	private String login;
 	
+	@NotBlank
+	@Size(max = 60, min = 6)
 	private String password;
 	
+	@NotBlank
+	@Size(max = 255)
 	private String nome;
+	
+	@Email
+	@NotBlank
+	@Size(max = 255)
+	private String email;
 	
 	//relacionando com usuario no telefone , removal é pra remover usuario junto com telefone
 	@OneToMany(mappedBy = "usuario" , 

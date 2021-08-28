@@ -30,7 +30,7 @@ public class Telefone implements Serializable {
 	private String numero;
 
 	@JsonIgnore
-	@ManyToOne
+	@ManyToOne(optional = false) //pra cadastra o telefone é obrigatório ter o pai usuario
 	@ForeignKey(name = "usuario_id")
 	private Usuario usuario;
 }
