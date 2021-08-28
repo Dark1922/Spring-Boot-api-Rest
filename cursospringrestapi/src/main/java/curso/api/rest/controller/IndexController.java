@@ -37,13 +37,6 @@ public class IndexController {
 		return new ResponseEntity<List<Usuario>>(list, HttpStatus.OK);
 	}
 	
-	@GetMapping("/lst")
-	public List<Usuario> listar() {
-		
-		return usuarioRepository.findAll();
-	}
-	
-	
 
 	/*               Métodos de Get buscar por id             */
 	
@@ -76,20 +69,18 @@ public class IndexController {
 	@PostMapping()
 	public ResponseEntity<Usuario> cadastrar(@RequestBody Usuario usuario) {
 
+		for(int pos = 0; pos < usuario.getTelefones().size(); pos++) {
+     	   usuario.getTelefones().get(pos).setUsuario(usuario); 
+        }//varrendo no get do telefone aonde está setando o usuario que 
+        //veio com parametro pai ,size é o tamanho
+		
 		Usuario Usuariosalvo = usuarioRepository.save(usuario);
 
 		return new ResponseEntity<Usuario>(Usuariosalvo, HttpStatus.CREATED);
 
 	}
 	
-	@PostMapping("/outrometodo")
-	@ResponseStatus(HttpStatus.CREATED)
-	public Usuario cadastrarOutroMetodo(@RequestBody Usuario usuario) {
-
-
-		return usuarioRepository.save(usuario);
-
-	}
+	
 	
 	/*               Métodos de Put Atualização de Usuários       */
 	
