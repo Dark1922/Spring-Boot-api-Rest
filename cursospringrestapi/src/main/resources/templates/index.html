@@ -1,10 +1,31 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="ISO-8859-1">
-<title>Insert title here</title>
+<meta charset="UTF-8">
+<title>Index</title>
+
+<script src="https://code.jquery.com/jquery-3.6.0.js"
+	integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+	crossorigin="anonymous"></script>
 </head>
 <body>
+
+<script >
+
+$(document).ready (
+		
+		function () {
+			
+			$.ajax({
+				url: "http://localhost:8080/cursospringrestapi/usuario/",
+				method: "GET"
+			}).then (function (data, status, info) {
+				
+			});
+		}
+		);
+
+</script>
 
 </body>
 </html>
