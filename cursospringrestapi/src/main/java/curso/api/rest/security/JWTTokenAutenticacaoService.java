@@ -2,11 +2,18 @@ package curso.api.rest.security;
 
 import java.util.Date;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.context.ApplicationContext;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
+import curso.api.rest.ApplicationContextLoad;
+import curso.api.rest.model.Usuario;
+import curso.api.rest.repository.UsuarioRepository;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
@@ -34,10 +41,52 @@ public class JWTTokenAutenticacaoService {
 		 
 		//usuario que está sendo recebido por param e sua data de expiração
 		 //pegando a data atual de agora mais o tempo de expiração
-		 //compactação e algoritimo e geração de senha 
-		 String JWT = Jwts.builder().setSubject(username)
-				 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
-				 .signWith(SignatureAlgorithm.ES512, SECRET).compact(); 
+	 String JWT = Jwts.builder()//chama o gerenciador de token
+	 .setSubject(username) //adiciona o usuario que ta fzd o login
+	 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME)) //tempo de expiração
+	.signWith(SignatureAlgorithm.HS512, SECRET).compact();  //compactação e algoritimo  e geração de senha 
+		
+	 //junta o token com o prefixo
+	 String token = TOKEN_PREFIXO + " " + JWT; // bearer 1239e12e0-wqr0sadsadqweo12e12 exemplo
+	 
+	 //adiciona  no cabeçalho http
+	 response.addHeader(HEADER_STRING, token); //Authorization: bearer 1239e12e0-wqr0sadsadqweo12e12
+	 
+	 //Escreve Token como resposta no no corpo http
+	 response.getWriter().write("{\"Authorization\": \""+token+"\"}");
+	 
+	 }
+	 //Retona o usuário validado com token ou caso não seja valido retorna null
+	 public Authentication getAuthentication(HttpServletRequest request) {
 		 
+		 //pega o token enviado no cabeçalho http
+		 String token = request.getHeader(HEADER_STRING);
+		 
+		 if(token != null ){
+			 //faz a validação do token do usuário na requisição
+			 
+			// bearer 1239e12e0-wqr0sadsadqweo12e12 token está assim
+			 String user = Jwts.parser().setSigningKey(SECRET) 
+					 
+					 //vem só o token sem o bearer / 1239e12e0-wqr0sadsadqweo12e12 so a numeração
+					 .parseClaimsJws(token.replace(TOKEN_PREFIXO, ""))
+					 
+					 //discompacta tudo retorna só o usuario
+					 .getBody().getSubject(); //"joao silva
+			 
+			 if(user != null) {
+				 //pega os dados em memoria pega o usuariorepository validando o login
+				 Usuario usuario = ApplicationContextLoad.getApplicationContext()
+						 .getBean(UsuarioRepository.class).findByLogin(user);
+				 
+				 if(usuario != null) {
+					 
+					 return new UsernamePasswordAuthenticationToken(
+							 usuario.getLogin(), usuario.getPassword(), usuario.getAuthorities());				 }
+				 
+			 }
+			 
+		 }
+			 return null; //não autorizado
 	 }
 }
