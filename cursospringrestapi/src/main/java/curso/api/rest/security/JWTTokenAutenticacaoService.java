@@ -1,11 +1,11 @@
 package curso.api.rest.security;
 
+import java.io.IOException;
 import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.context.ApplicationContext;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
@@ -35,7 +35,7 @@ public class JWTTokenAutenticacaoService {
 	 
 	 //gerando token de autenticação e adicionando ao cabeçalho e resposta http
 	 public void addAuthentication(HttpServletResponse response,
-			 String username) throws Exception{
+			 String username)  throws IOException{
 		 
 		 //Montagem do token
 		 
@@ -82,11 +82,14 @@ public class JWTTokenAutenticacaoService {
 				 if(usuario != null) {
 					 
 					 return new UsernamePasswordAuthenticationToken(
-							 usuario.getLogin(), usuario.getPassword(), usuario.getAuthorities());				 }
-				 
+							 usuario.getLogin(),
+							 usuario.getPassword(),
+							 usuario.getAuthorities());				
+			      }
 			 }
 			 
-		 }
+		  }
+		 
 			 return null; //não autorizado
 	 }
 }
