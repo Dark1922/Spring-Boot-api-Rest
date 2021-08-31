@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -74,6 +75,10 @@ public class IndexController {
      	   usuario.getTelefones().get(pos).setUsuario(usuario); 
         }//varrendo no get do telefone aonde está setando o usuario que 
         //veio com parametro pai ,size é o tamanho
+		
+		//criptografia de senha
+		String senhaCriptografada = new BCryptPasswordEncoder().encode(usuario.getPassword());
+		usuario.setPassword(senhaCriptografada);
 		
 		Usuario Usuariosalvo = usuarioRepository.save(usuario);
 
