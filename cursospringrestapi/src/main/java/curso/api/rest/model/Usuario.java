@@ -25,6 +25,8 @@ import javax.validation.constraints.Size;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -43,7 +45,8 @@ public class Usuario  implements UserDetails{ //ja tem o serializable e os metod
 	private Long id;
 	
 	@NotBlank
-	@Size(max = 60, min = 6)
+	@Size(max = 60, min = 4)
+	@Column(unique = true) //login é único
 	private String login;
 	
 	@NotBlank
@@ -58,6 +61,7 @@ public class Usuario  implements UserDetails{ //ja tem o serializable e os metod
 	@Email
 	@NotBlank
 	@Size(max = 255)
+	@Column(unique = true)
 	private String email;
 	
 	//relacionando com usuario no telefone , removal é pra remover usuario junto com telefone
@@ -74,8 +78,11 @@ public class Usuario  implements UserDetails{ //ja tem o serializable e os metod
     foreignKey = @ForeignKey (name = "role_fk", value = ConstraintMode.CONSTRAINT)))
 	private List<Role> roles; //papeis de acesso
 	
+    
+   
 
 	//autorizações são os acessos do usuario ROLE_ADMIN GERENTE etc
+    @JsonIgnore
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return roles;
@@ -85,27 +92,26 @@ public class Usuario  implements UserDetails{ //ja tem o serializable e os metod
 	public String getUsername() {
 		return this.login;
 	}
-	
 	@Override
 	public String getPassword() {
 		return this.password;
 	}
-
+	@JsonIgnore
 	@Override
 	public boolean isAccountNonExpired() {
 		return true;
 	}
-
+	@JsonIgnore
 	@Override
 	public boolean isAccountNonLocked() {
 		return true;
 	}
-
+	@JsonIgnore
 	@Override
 	public boolean isCredentialsNonExpired() {
 		return true;
 	}
-
+	@JsonIgnore
 	@Override
 	public boolean isEnabled() {
 		return true;
