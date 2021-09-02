@@ -88,6 +88,7 @@ public class Usuario  implements UserDetails{ //ja tem o serializable e os metod
 		return roles;
 	}
 
+    @JsonIgnore
 	@Override
 	public String getUsername() {
 		return this.login;
