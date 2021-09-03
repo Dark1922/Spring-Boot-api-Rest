@@ -3,6 +3,9 @@ package curso.api.rest.controller;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -30,12 +33,16 @@ public class IndexController {
 	private UsuarioRepository usuarioRepository;
 
 	// serviços restfull  Métodos Buscar por Todos
+	
 	@GetMapping()
-	public ResponseEntity<List<Usuario>> listarTodos() {
+	@CacheEvict(value="listausers" ,allEntries = true )  
+	@CachePut("listausers")
+	public ResponseEntity<List<Usuario>> listarTodos() throws InterruptedException {
 
 		// retorna optional
 		List<Usuario> list = (List<Usuario>) usuarioRepository.findAll();
 
+		
 		return new ResponseEntity<List<Usuario>>(list, HttpStatus.OK);
 	}
 	
@@ -43,6 +50,8 @@ public class IndexController {
 	/*               Métodos de Get buscar por id             */
 	
 	@GetMapping(value = "/{id}", produces = "application/json")
+	@CacheEvict(value="buscarusers" ,allEntries = true )  
+	@CachePut("buscarusers")
 	public ResponseEntity<Usuario> buscarPorId(@PathVariable Long id) {
 
 		// vai retorna a pessoa se der certo retorna um status ok , se n encontrar dá um
