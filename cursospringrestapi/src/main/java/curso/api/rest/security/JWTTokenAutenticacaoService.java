@@ -65,11 +65,13 @@ public class JWTTokenAutenticacaoService {
 		 if(token != null ){
 			 //faz a validação do token do usuário na requisição
 			 
+			 String tokenLimpo = token.replace(TOKEN_PREFIXO, "").trim();
+			 
 			// bearer 1239e12e0-wqr0sadsadqweo12e12 token está assim
 			 String user = Jwts.parser().setSigningKey(SECRET) 
 					 
 					 //vem só o token sem o bearer / 1239e12e0-wqr0sadsadqweo12e12 so a numeração
-					 .parseClaimsJws(token.replace(TOKEN_PREFIXO, ""))
+					 .parseClaimsJws(tokenLimpo.replace(TOKEN_PREFIXO, ""))
 					 
 					 //discompacta tudo retorna só o usuario
 					 .getBody().getSubject(); //"joao silva
@@ -79,12 +81,17 @@ public class JWTTokenAutenticacaoService {
 				 Usuario usuario = ApplicationContextLoad.getApplicationContext()
 						 .getBean(UsuarioRepository.class).findByLogin(user);
 				 
-				 if(usuario != null) {
+				 if(usuario != null) { //usuario é diferente de null
+					 
+					 if(tokenLimpo.equalsIgnoreCase(usuario.getToken())) {
+						 //se o token for igual ao que está cadastrado no banco vai passar
+					 
 					 
 					 return new UsernamePasswordAuthenticationToken(
 							 usuario.getLogin(),
 							 usuario.getPassword(),
-							 usuario.getAuthorities());				
+							 usuario.getAuthorities());	
+					 }
 			      }
 			 }
 			 
