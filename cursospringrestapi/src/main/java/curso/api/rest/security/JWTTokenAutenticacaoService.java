@@ -93,7 +93,7 @@ public class JWTTokenAutenticacaoService {
 					 
 					 return new UsernamePasswordAuthenticationToken(
 							 usuario.getLogin(),
-							 usuario.getPassword(),
+							 usuario.getPassword(), 
 							 usuario.getAuthorities());	
 					 }
 			      }
