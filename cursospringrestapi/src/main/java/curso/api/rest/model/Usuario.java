@@ -63,6 +63,7 @@ public class Usuario  implements UserDetails{ //ja tem o serializable e os metod
 	@Column(unique = true)
 	private String email;
 	
+	@JsonIgnore
 	private String token = "";
 	
 	//relacionando com usuario no telefone , removal é pra remover usuario junto com telefone

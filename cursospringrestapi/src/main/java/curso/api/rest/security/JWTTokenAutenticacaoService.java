@@ -52,12 +52,16 @@ public class JWTTokenAutenticacaoService {
 	 //adiciona  no cabeçalho http
 	 response.addHeader(HEADER_STRING, token); //Authorization: bearer 1239e12e0-wqr0sadsadqweo12e12
 	 
+	 //liberando resposta para portas diferentes que usam a api ou caso clientes web
+	 liberacaoCors(response);
+	 
 	 //Escreve Token como resposta no no corpo http
 	 response.getWriter().write("{\"Authorization\": \""+token+"\"}");
 	 
 	 }
 	 //Retona o usuário validado com token ou caso não seja valido retorna null
-	 public Authentication getAuthentication(HttpServletRequest request) {
+	 public Authentication getAuthentication(HttpServletRequest request, HttpServletResponse
+			 response) {
 		 
 		 //pega o token enviado no cabeçalho http
 		 String token = request.getHeader(HEADER_STRING);
@@ -96,7 +100,29 @@ public class JWTTokenAutenticacaoService {
 			 }
 			 
 		  }
-		 
+		     
+		 liberacaoCors(response);
 			 return null; //não autorizado
 	 }
+	private void liberacaoCors(HttpServletResponse response) {
+
+		if(response.getHeader("Access-Control-Allow-Origin") == null) {
+			//liberando a resposta e requisição da api pro usuario
+			response.addHeader("Access-Control-Allow-Origin", "*");
+		}
+		
+		if(response.getHeader("Access-Control-Allow-Headers") == null) {
+			
+			response.addHeader("Access-Control-Allow-Headers", "*");
+		}
+		
+		if(response.getHeader("Access-Contro-Request-Headers") == null) {
+			response.addHeader("Access-Contro-Request-Headers", "*");
+		}
+		
+		if(response.getHeader("Access-Control-Allow-Methods") == null) {
+			response.addHeader("Access-Control-Allow-Methods", "*");
+			
+		}
+	}
 }

@@ -11,7 +11,7 @@
 	</parent> 
 	<groupId>curso.api.rest</groupId> 
 	<artifactId>cursospringrestapi</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.1-SNAPSHOT</version> 
 	<name>cursospringrestapi</name> 
 	<packaging>war</packaging>
 	<description>Curso API REST Spring Boot</description>
