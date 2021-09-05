@@ -61,7 +61,7 @@ public class IndexController {
 	}
 
 
-	
+		
 	@GetMapping(value = "/{id}")
 	public ResponseEntity<UsuarioDTO> poridAlex(@PathVariable Long id) {
 
