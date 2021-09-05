@@ -70,9 +70,15 @@ public class JWTTokenAutenticacaoService {
 		 //pega o token enviado no cabeçalho http
 		 String token = request.getHeader(HEADER_STRING);
 		 
+
 		 try { 
 		  
 		 if(token != null ){ 
+
+		 try {
+		 
+		 if(token != null ){
+
 			 //faz a validação do token do usuário na requisição
 			 
 			 String tokenLimpo = token.replace(TOKEN_PREFIXO, "").trim();
