@@ -1,5 +1,11 @@
 package curso.api.rest.controller;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,6 +23,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.google.gson.Gson;
 
 import curso.api.rest.model.Usuario;
 import curso.api.rest.model.UsuarioDTO;
@@ -78,12 +86,38 @@ public class IndexController {
 	/*               Métodos de Post criação de Usuários             */
 
 	@PostMapping()
-	public ResponseEntity<Usuario> cadastrar(@RequestBody Usuario usuario) {
+	public ResponseEntity<Usuario> cadastrar(@RequestBody Usuario usuario) throws Exception {
 
 		for(int pos = 0; pos < usuario.getTelefones().size(); pos++) {
      	   usuario.getTelefones().get(pos).setUsuario(usuario); 
         }//varrendo no get do telefone aonde está setando o usuario que 
         //veio com parametro pai ,size é o tamanho
+		
+		
+		// consumindo api publica externa 
+		URL url = new URL("https://viacep.com.br/ws/"+usuario.getCep()+"/json/");
+		URLConnection connection = url.openConnection(); //abre a conexão
+		InputStream is = connection.getInputStream(); //vem os dados da requisição do cep passado
+		BufferedReader br = new BufferedReader(new InputStreamReader(is, "UTF-8")); //prepara a leitura
+		
+		String cep = "";
+		StringBuilder jsonCep = new StringBuilder();
+		
+		//se tem linha passa os dados para várivel cep
+		while((cep = br.readLine()) != null) { //faz a leitura dos dados que vem do cep
+			jsonCep.append(cep); //juntar / unir os dados do cep
+		}
+		
+		//vai pegar a string e converte pra json logradouro etc dentro dos atributo do Usuario.class
+		Usuario userAux = new Gson().fromJson(jsonCep.toString(), Usuario.class);
+		
+		usuario.setCep(userAux.getCep());
+		usuario.setLogradouro(userAux.getLogradouro());
+		usuario.setComplemento(userAux.getComplemento());
+		usuario.setBairro(userAux.getBairro());
+		usuario.setLocalidade(userAux.getLocalidade());
+		usuario.setUf(userAux.getUf());
+		
 		
 		//criptografia de senha
 		String senhaCriptografada = new BCryptPasswordEncoder().encode(usuario.getPassword());
@@ -101,7 +135,7 @@ public class IndexController {
 	
 	@PutMapping("/{id}")
 	public ResponseEntity<Usuario>atualizar(@PathVariable Long id,
-			@RequestBody Usuario usuario) {
+			@RequestBody Usuario usuario) throws Exception {
 		
 		if(!usuarioRepository.existsById(id)) {
 			return ResponseEntity.notFound().build();
@@ -121,6 +155,30 @@ public class IndexController {
 			String senhaCriptografada = new BCryptPasswordEncoder().encode(usuario.getPassword());
 			usuario.setPassword(senhaCriptografada);
 		}
+		
+		// consumindo api publica externa 
+				URL url = new URL("https://viacep.com.br/ws/"+usuario.getCep()+"/json/");
+				URLConnection connection = url.openConnection(); //abre a conexão
+				InputStream is = connection.getInputStream(); //vem os dados da requisição do cep passado
+				BufferedReader br = new BufferedReader(new InputStreamReader(is, "UTF-8")); //prepara a leitura
+				
+				String cep = "";
+				StringBuilder jsonCep = new StringBuilder();
+				
+				//se tem linha passa os dados para várivel cep
+				while((cep = br.readLine()) != null) { //faz a leitura dos dados que vem do cep
+					jsonCep.append(cep); //juntar / unir os dados do cep
+				}
+				
+				//vai pegar a string e converte pra json logradouro etc dentro dos atributo do Usuario.class
+				Usuario userAux = new Gson().fromJson(jsonCep.toString(), Usuario.class);
+				
+				usuario.setCep(userAux.getCep());
+				usuario.setLogradouro(userAux.getLogradouro());
+				usuario.setComplemento(userAux.getComplemento());
+				usuario.setBairro(userAux.getBairro());
+				usuario.setLocalidade(userAux.getLocalidade());
+				usuario.setUf(userAux.getUf());
 
 		Usuario UsuarioAtualizar= usuarioRepository.save(usuario);
 
@@ -143,4 +201,6 @@ public class IndexController {
 		
 		return ResponseEntity.noContent().build();
 	}
+	
+	
 }

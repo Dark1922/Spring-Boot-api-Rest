@@ -71,9 +71,7 @@ public class JWTTokenAutenticacaoService {
 		 String token = request.getHeader(HEADER_STRING);
 		 
 
-		 try { 
-		  
-		 if(token != null ){ 
+		
 
 		 try {
 		 
