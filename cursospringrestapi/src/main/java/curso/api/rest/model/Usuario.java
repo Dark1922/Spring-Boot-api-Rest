@@ -52,6 +52,10 @@ public class Usuario  implements UserDetails{ //ja tem o serializable e os metod
 	@Size(max = 150, min = 6)
 	@Column(name = "senha")
 	private String password;
+	 
+	@NotBlank
+	@Size(max = 11, min = 11)
+	private String cpf;
 	
 	@NotBlank
 	@Size(max = 255)

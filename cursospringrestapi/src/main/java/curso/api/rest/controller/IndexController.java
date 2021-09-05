@@ -5,7 +5,6 @@ import java.util.Optional;
 
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -20,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import curso.api.rest.model.Usuario;
+import curso.api.rest.model.UsuarioDTO;
 import curso.api.rest.repository.UsuarioRepository;
 import lombok.AllArgsConstructor;
 
@@ -49,7 +49,7 @@ public class IndexController {
 
 	/*               Métodos de Get buscar por id             */
 	
-	@GetMapping(value = "/{id}", produces = "application/json")
+	@GetMapping(value = "/oi/{id}", produces = "application/json")
 	@CacheEvict(value="buscarusers" ,allEntries = true )  
 	@CachePut("buscarusers")
 	public ResponseEntity<Usuario> buscarPorId(@PathVariable Long id) {
@@ -62,14 +62,14 @@ public class IndexController {
 
 
 	
-	@GetMapping(value = "/metodoalex/{id}")
-	public ResponseEntity<Usuario> poridAlex(@PathVariable Long id) {
+	@GetMapping(value = "/{id}")
+	public ResponseEntity<UsuarioDTO> poridAlex(@PathVariable Long id) {
 
 		// retorna optional
 		Optional<Usuario> usuario = usuarioRepository.findById(id);
 
 		// o retorno seria um relatorio
-		return new ResponseEntity<Usuario>(usuario.get(), HttpStatus.OK);
+		return new ResponseEntity<UsuarioDTO>(new UsuarioDTO(usuario.get()), HttpStatus.OK);
 	}
 	
 	
