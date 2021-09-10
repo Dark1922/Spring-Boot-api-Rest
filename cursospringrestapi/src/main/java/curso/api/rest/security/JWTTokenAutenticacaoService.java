@@ -145,6 +145,6 @@ public class JWTTokenAutenticacaoService {
 		if(response.getHeader("Access-Control-Allow-Methods") == null) {
 			response.addHeader("Access-Control-Allow-Methods", "*");
 			
-		}
+		} 
 	}
 }
