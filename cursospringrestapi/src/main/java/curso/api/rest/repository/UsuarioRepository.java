@@ -1,5 +1,7 @@
 package curso.api.rest.repository;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -17,6 +19,9 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
     
 	@Query("select u from Usuario u where u.email = ?1")
 	Usuario findByEmail(String email);
+	
+	@Query("select u from Usuario u where upper(trim(u.nome)) like %?1%")
+	List<Usuario> findByNome(String nome);
 	
 	@Modifying //vai fazer modificação no banco de dados
 	@Query(nativeQuery = true ,value = "update usuario set token = ?1 where login = ?2 ")

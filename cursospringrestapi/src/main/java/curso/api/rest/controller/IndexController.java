@@ -51,7 +51,7 @@ public class IndexController {
 
 		
 		return new ResponseEntity<List<Usuario>>(list, HttpStatus.OK);
-	}
+	} 
 	
 
 	/*               Métodos de Get buscar por id             */
@@ -199,6 +199,20 @@ public class IndexController {
 		usuarioRepository.deleteById(id);
 		
 		return ResponseEntity.noContent().build();
+	}
+	
+	/* Método de pesquisar usuário por nome */
+	@GetMapping("/buscarPorNome/{nome}")
+	@CacheEvict(value="listanome" ,allEntries = true )  
+	@CachePut("listanome")
+	public ResponseEntity<List<Usuario>> buscarPorNome(@PathVariable String nome) 
+			throws InterruptedException {
+
+		// retorna optional
+		List<Usuario> list = usuarioRepository.findByNome(nome.trim().toUpperCase());
+
+		
+		return new ResponseEntity<List<Usuario>>(list, HttpStatus.OK);
 	}
 	
 	
