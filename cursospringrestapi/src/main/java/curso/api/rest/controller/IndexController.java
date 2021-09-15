@@ -146,7 +146,8 @@ public class IndexController {
 	     	   usuario.getTelefones().get(pos).setUsuario(usuario); 
 	        }
 		
-		Usuario userTemporario = usuarioRepository.findByLogin(usuario.getLogin());
+		//comparando a senha do usuario pelo id que é um elemento que n pode ser mudado
+		Usuario userTemporario = usuarioRepository.findById(usuario.getId()).get();
 		
 		//senhas diferente
 		if(!userTemporario.getPassword().equals(usuario.getPassword())) {
@@ -201,7 +202,7 @@ public class IndexController {
 		return ResponseEntity.noContent().build();
 	}
 	
-	/* Método de pesquisar usuário por nome */
+	/* END-POINT de consultar de usuário por nome */
 	@GetMapping("/buscarPorNome/{nome}")
 	@CacheEvict(value="listanome" ,allEntries = true )  
 	@CachePut("listanome")

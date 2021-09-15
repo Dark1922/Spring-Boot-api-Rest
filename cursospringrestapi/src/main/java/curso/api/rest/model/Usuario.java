@@ -21,6 +21,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
+import org.hibernate.validator.constraints.br.CPF;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -54,7 +55,7 @@ public class Usuario  implements UserDetails{ //ja tem o serializable e os metod
 	private String password;
 	 
 	@NotBlank
-	@Size(max = 11, min = 11)
+	@CPF(message = "Informe um Cpf válido")
 	private String cpf;
 	
 	@NotBlank
@@ -91,7 +92,7 @@ public class Usuario  implements UserDetails{ //ja tem o serializable e os metod
     foreignKey = @ForeignKey(name = "usuario_fk", value = ConstraintMode.CONSTRAINT)),
     inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id", table = "role", unique = false,updatable = false,
     foreignKey = @ForeignKey (name = "role_fk", value = ConstraintMode.CONSTRAINT)))
-	private List<Role> roles; //papeis de acesso
+	private List<Role> roles = new ArrayList<Role>(); //papeis de acesso
 	
     
    
