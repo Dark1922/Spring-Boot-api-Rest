@@ -15,9 +15,9 @@ import lombok.Setter;
 @Setter
 public class ObjetoErro {
 
-	private String error;
-	private String code;
 	private String titulo;
+	private String code;
+	private String error;
 	private OffsetDateTime dataHora;
 	private List<Campo> campos;
 	

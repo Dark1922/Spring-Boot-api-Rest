@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import curso.api.rest.model.Usuario;
 import curso.api.rest.model.UsuarioDTO;
 import curso.api.rest.repository.UsuarioRepository;
+import curso.api.rest.service.ImplementacaoUserDetailsService;
 import lombok.AllArgsConstructor;
 
 @Controller // arquitetura rest
@@ -33,6 +34,9 @@ public class IndexController {
 
 	// se fosse cdi @Inject
 	private UsuarioRepository usuarioRepository;
+	
+	private ImplementacaoUserDetailsService implementacaoUserDetailsService;
+	
 
 	// serviços restfull  Métodos Buscar por Todos
 	
@@ -119,7 +123,7 @@ public class IndexController {
 		
 		Usuario Usuariosalvo = usuarioRepository.save(usuario);
 		
-		
+		implementacaoUserDetailsService.insereAcessoPadrão(Usuariosalvo.getId());
 
 		return new ResponseEntity<Usuario>(Usuariosalvo, HttpStatus.CREATED);
 

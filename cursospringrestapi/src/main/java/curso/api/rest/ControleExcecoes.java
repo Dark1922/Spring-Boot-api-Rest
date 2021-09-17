@@ -54,6 +54,8 @@ public class ControleExcecoes extends ResponseEntityExceptionHandler{
 		ObjetoErro objetoErro = new ObjetoErro();
 		objetoErro.setError(msg);
 		objetoErro.setCode(status.value() + " ==> " + status.getReasonPhrase());
+		objetoErro.setDataHora(OffsetDateTime.now()); //na hora que ocorreu 
+		objetoErro.setTitulo("Um ou mais campos estão inválidos. Faça o preenchimento corretamente e tente novamente");
 		
 		return new 	ResponseEntity<Object>(objetoErro, headers, status);
 	}
