@@ -1,12 +1,9 @@
 package curso.api.rest.controller;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.List;
 import java.util.Optional;
+
+import javax.validation.Valid;
 
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
@@ -22,8 +19,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import com.google.gson.Gson;
 
 import curso.api.rest.model.Usuario;
 import curso.api.rest.model.UsuarioDTO;
@@ -85,7 +80,7 @@ public class IndexController {
 	/*               Métodos de Post criação de Usuários             */
 
 	@PostMapping()
-	public ResponseEntity<Usuario> cadastrar(@RequestBody Usuario usuario) throws Exception {
+	public ResponseEntity<Usuario> cadastrar(@Valid @RequestBody Usuario usuario) throws Exception {
 
 		for(int pos = 0; pos < usuario.getTelefones().size(); pos++) {
      	   usuario.getTelefones().get(pos).setUsuario(usuario); 
@@ -93,7 +88,7 @@ public class IndexController {
         //veio com parametro pai ,size é o tamanho
 		
 		
-		// consumindo api publica externa 
+		/*consumindo api publica externa 
 		URL url = new URL("https://viacep.com.br/ws/"+usuario.getCep()+"/json/");
 		URLConnection connection = url.openConnection(); //abre a conexão
 		InputStream is = connection.getInputStream(); //vem os dados da requisição do cep passado
@@ -116,13 +111,15 @@ public class IndexController {
 		usuario.setBairro(userAux.getBairro());
 		usuario.setLocalidade(userAux.getLocalidade());
 		usuario.setUf(userAux.getUf());
-		
+		*/
 		
 		//criptografia de senha
 		String senhaCriptografada = new BCryptPasswordEncoder().encode(usuario.getPassword());
 		usuario.setPassword(senhaCriptografada);
 		
 		Usuario Usuariosalvo = usuarioRepository.save(usuario);
+		
+		
 
 		return new ResponseEntity<Usuario>(Usuariosalvo, HttpStatus.CREATED);
 
@@ -133,7 +130,7 @@ public class IndexController {
 	/*               Métodos de Put Atualização de Usuários       */
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<Usuario>atualizar(@PathVariable Long id,
+	public ResponseEntity<Usuario>atualizar(@Valid @PathVariable Long id,
 			@RequestBody Usuario usuario) throws Exception {
 		
 		if(!usuarioRepository.existsById(id)) {
@@ -156,6 +153,7 @@ public class IndexController {
 			usuario.setPassword(senhaCriptografada);
 		}
 		
+		/*
 		// consumindo api publica externa 
 				URL url = new URL("https://viacep.com.br/ws/"+usuario.getCep()+"/json/");
 				URLConnection connection = url.openConnection(); //abre a conexão
@@ -179,7 +177,7 @@ public class IndexController {
 				usuario.setBairro(userAux.getBairro());
 				usuario.setLocalidade(userAux.getLocalidade());
 				usuario.setUf(userAux.getUf());
-
+*/
 		Usuario UsuarioAtualizar= usuarioRepository.save(usuario);
 
 		return 	ResponseEntity.ok(UsuarioAtualizar);

@@ -12,6 +12,8 @@ public class UsuarioDTO implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
+	private Long userId;
+	private String userPassword;
 	private String userLogin;
 	private String userNome;
 	private String userCpf;
@@ -25,6 +27,8 @@ public class UsuarioDTO implements Serializable {
 		this.userCpf = usuario.getCpf();
 		this.userEmail = usuario.getEmail();
 		this.userTelefone = usuario.getTelefones();
+		this.userId = usuario.getId();
+		this.userPassword = usuario.getPassword();
 	}	
 
 }

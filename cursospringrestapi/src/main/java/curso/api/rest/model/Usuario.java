@@ -44,12 +44,12 @@ public class Usuario  implements UserDetails{ //ja tem o serializable e os metod
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	
-	@NotBlank
+	@NotBlank(message = "Infome um login")
 	@Size(max = 60, min = 4)
 	@Column(unique = true) //login é único
 	private String login;
 	
-	@NotBlank
+	@NotBlank(message = "Infome uma senha")
 	@Size(max = 150, min = 6)
 	@Column(name = "senha")
 	private String password;
@@ -58,10 +58,11 @@ public class Usuario  implements UserDetails{ //ja tem o serializable e os metod
 	@CPF(message = "Informe um Cpf válido")
 	private String cpf;
 	
-	@NotBlank
+	@NotBlank(message = "Infome um Nome")
 	@Size(max = 255)
 	private String nome;
 	
+	/*
 	@NotBlank
 	private String cep;
 	
@@ -70,9 +71,10 @@ public class Usuario  implements UserDetails{ //ja tem o serializable e os metod
 	private String bairro;
 	private String localidade;
 	private String uf;
+	*/
 	
-	@Email
-	@NotBlank
+	@Email(message = "Informe um email válido")
+	@NotBlank(message = "E-mail é obrigatório")
 	@Size(max = 255)
 	@Column(unique = true)
 	private String email;

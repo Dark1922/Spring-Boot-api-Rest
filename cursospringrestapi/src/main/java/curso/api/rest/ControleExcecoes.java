@@ -1,6 +1,8 @@
 package curso.api.rest;
 
 import java.sql.SQLException;
+import java.time.OffsetDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.ConstraintViolationException;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+
 @RestControllerAdvice
 @ControllerAdvice
 public class ControleExcecoes extends ResponseEntityExceptionHandler{
@@ -30,7 +33,9 @@ public class ControleExcecoes extends ResponseEntityExceptionHandler{
 		
 		String msg = "";
 		
-		//argumentos inválidos para algum método
+		//argumentos inválidos para as entidades
+		
+		
 		if(ex instanceof MethodArgumentNotValidException) {
 			
 			List<ObjectError> list = ((MethodArgumentNotValidException) ex)
@@ -38,7 +43,7 @@ public class ControleExcecoes extends ResponseEntityExceptionHandler{
 			
 			for (ObjectError objectError : list) { //varrer a lista
 
-				msg += objectError.getDefaultMessage() + "\n"; //colocar as msg na string
+				msg += objectError.getDefaultMessage() + ", "; //colocar as msg na string
 			}
 			
 		}else {

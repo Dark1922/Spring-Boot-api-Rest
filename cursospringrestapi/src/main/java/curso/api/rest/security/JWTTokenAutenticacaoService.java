@@ -134,7 +134,6 @@ public class JWTTokenAutenticacaoService {
 		}
 		
 		if(response.getHeader("Access-Control-Allow-Headers") == null) {
-			
 			response.addHeader("Access-Control-Allow-Headers", "*");
 		}
 		
