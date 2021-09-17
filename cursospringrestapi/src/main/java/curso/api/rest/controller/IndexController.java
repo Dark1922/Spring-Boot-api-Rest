@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import curso.api.rest.model.Usuario;
 import curso.api.rest.model.UsuarioDTO;
+import curso.api.rest.repository.TelefoneRepository;
 import curso.api.rest.repository.UsuarioRepository;
 import curso.api.rest.service.ImplementacaoUserDetailsService;
 import lombok.AllArgsConstructor;
@@ -36,6 +37,8 @@ public class IndexController {
 	private UsuarioRepository usuarioRepository;
 	
 	private ImplementacaoUserDetailsService implementacaoUserDetailsService;
+	
+	private TelefoneRepository telefoneRepository;
 	
 
 	// serviços restfull  Métodos Buscar por Todos
@@ -120,7 +123,7 @@ public class IndexController {
 		//criptografia de senha
 		String senhaCriptografada = new BCryptPasswordEncoder().encode(usuario.getPassword());
 		usuario.setPassword(senhaCriptografada);
-		
+		 
 		Usuario Usuariosalvo = usuarioRepository.save(usuario);
 		
 		implementacaoUserDetailsService.insereAcessoPadrão(Usuariosalvo.getId());
@@ -218,5 +221,16 @@ public class IndexController {
 		return new ResponseEntity<List<Usuario>>(list, HttpStatus.OK);
 	}
 	
+	@DeleteMapping("/removerTelefone/{id}")
+	public ResponseEntity<Void> deleteTelefone(@PathVariable Long id) {
+		
+		if(!telefoneRepository.existsById(id)) {
+			return ResponseEntity.notFound().build();
+		}
+		
+		telefoneRepository.deleteById(id);
+		
+		return ResponseEntity.noContent().build();
+	}
 	
 }

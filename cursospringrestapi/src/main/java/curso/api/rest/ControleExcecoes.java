@@ -76,6 +76,7 @@ public class ControleExcecoes extends ResponseEntityExceptionHandler{
 		else if(ex instanceof SQLException) {
 			msg = ((SQLException) ex).getCause().getCause().getMessage();
 		}
+		
 		else {
 			msg = ex.getMessage();
 		}
