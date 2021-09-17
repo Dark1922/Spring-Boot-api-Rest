@@ -41,7 +41,7 @@ public class ImplementacaoUserDetailsService implements UserDetailsService{
 		if(constraint != null) { //se ela realmente desistir vai dar o comando de remover ela no banco
 		
 		//remove a constraint com nome que foi pego na consulta
-		jdbcTemplate.execute("alter table usuarios role DROP CONSTRAINT " + constraint);
+		jdbcTemplate.execute("alter table usuarios_role DROP CONSTRAINT " + constraint);
 		
 		//insere os acesso padrão
 		usuarioRepository.insereAcessoRolePadrao(id);
