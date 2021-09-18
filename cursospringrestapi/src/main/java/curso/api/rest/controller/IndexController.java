@@ -62,6 +62,22 @@ public class IndexController {
 		
 	} 
 	
+	@GetMapping("/page/{pagina}")
+	@CacheEvict(value="listausersPage" ,allEntries = true )  
+	@CachePut("listausersPage")
+	public ResponseEntity<Page<Usuario>> usuarioPagina(@PathVariable int pagina) throws InterruptedException {
+
+		//paginação de 5 em 5 ordenado por nome, passa a página como parametro que recebe as posição da pagina
+		//de acordo com oque agente clica
+		PageRequest page = PageRequest.of(pagina, 5, Sort.by("nome"));
+		
+		//find all retorna uma implementação de página ai passamos nosso page configurado
+		Page<Usuario> list = usuarioRepository.findAll(page);
+		
+         //vai retorna uma página configurada do tipo usuários na lista
+		return new ResponseEntity<Page<Usuario>>(list, HttpStatus.OK);
+		
+	}
 
 	/*               Métodos de Get buscar por id             */
 	
