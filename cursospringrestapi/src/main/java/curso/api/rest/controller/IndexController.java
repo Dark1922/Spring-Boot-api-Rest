@@ -234,16 +234,32 @@ public class IndexController {
 	@GetMapping("/buscarPorNome/{nome}")
 	@CacheEvict(value="listanome" ,allEntries = true )  
 	@CachePut("listanome")
-	public ResponseEntity<List<Usuario>> buscarPorNome(@PathVariable String nome) 
+	public ResponseEntity<Page<Usuario>> buscarPorNome(@PathVariable String nome) 
 			throws InterruptedException {
-
-		// retorna optional
-		List<Usuario> list = usuarioRepository.findByNome(nome.trim().toUpperCase());
-
 		
-		return new ResponseEntity<List<Usuario>>(list, HttpStatus.OK);
+		PageRequest pageRequest  = null;
+		Page<Usuario> list = null;
+				
+		/* não informou o nome e deixou vazio o campo de pesquisa, continua na paginação*/
+		if(nome == null || (nome != null && nome.trim().isEmpty())
+			|| nome.equalsIgnoreCase("undefined")) {
+			
+			pageRequest = PageRequest.of(0, 5, Sort.by("nome"));
+			 list = usuarioRepository.findAll(pageRequest);
+		
+			/*Informou o nome e faz o método de consulta por paginação*/
+		}else {
+			pageRequest = PageRequest.of(0, 5, Sort.by("nome"));
+			list = usuarioRepository.findUserByNamePage(nome, pageRequest);
+			
+		}		
+		//método de consulta sem paginação
+		//List<Usuario> list = usuarioRepository.findByNome(nome.trim().toUpperCase());
+		
+		return new ResponseEntity<Page<Usuario>>(list, HttpStatus.OK);
 	}
 	
+	/* END-POINT de deletar telefones por id */
 	@DeleteMapping("/removerTelefone/{id}")
 	public ResponseEntity<Void> deleteTelefone(@PathVariable Long id) {
 		

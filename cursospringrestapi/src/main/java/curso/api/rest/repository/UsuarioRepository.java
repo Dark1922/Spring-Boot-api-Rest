@@ -4,6 +4,10 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -38,4 +42,22 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
 	@Query(nativeQuery = true , value = "insert into usuarios_role (usuario_id, role_id)"
 			+ "	values(?1, (select id from role where nome_role = 'ADMIN_ROLE'))")
 	void insereAcessoRolePadrao(Long id);
+
+	default Page<Usuario> findUserByNamePage(String nome, PageRequest pageRequest) {
+		
+		Usuario usuario = new Usuario();
+		usuario.setNome(nome); //usuário que veio da tela pra consulta
+		
+		/*Configurando para pesquisar por nome e paginação, consultar onde existir parte desse nome contains() ignorando as case */
+		ExampleMatcher exampleMatcher = ExampleMatcher.matchingAny()
+				.withMatcher("nome", ExampleMatcher.GenericPropertyMatchers.contains().ignoreCase());
+		
+		/*prepara essa consulta juntando usuário com as configurações de consulta*/
+		Example<Usuario> example = Example.of(usuario, exampleMatcher);
+		
+		/*Toda configuração de paginação e também de consulta*/
+		Page<Usuario> retorno = findAll(example,pageRequest);
+		
+		return retorno; //retorno que veio da consulta
+	}
 }
