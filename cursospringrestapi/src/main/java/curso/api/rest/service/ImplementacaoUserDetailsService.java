@@ -32,7 +32,7 @@ public class ImplementacaoUserDetailsService implements UserDetailsService{
 		
 		return new User(usuario.getLogin(), usuario.getPassword(), usuario.getAuthorities());
 		//usuario tem que passar login senha e suas autoridade
-	}
+	} 
 
 	public void insereAcessoPadrão(Long id) {
 		//descobri qual é a constraint de restrição

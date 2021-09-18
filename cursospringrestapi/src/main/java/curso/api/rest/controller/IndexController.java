@@ -7,6 +7,9 @@ import javax.validation.Valid;
 
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -46,13 +49,17 @@ public class IndexController {
 	@GetMapping()
 	@CacheEvict(value="listausers" ,allEntries = true )  
 	@CachePut("listausers")
-	public ResponseEntity<List<Usuario>> listarTodos() throws InterruptedException {
+	public ResponseEntity<Page<Usuario>> listarTodos() throws InterruptedException {
 
-		// retorna optional
-		List<Usuario> list = (List<Usuario>) usuarioRepository.findAll();
-
+		//paginação de 5 em 5 ordenado por nome
+		PageRequest page = PageRequest.of(0, 5, Sort.by("nome"));
 		
-		return new ResponseEntity<List<Usuario>>(list, HttpStatus.OK);
+		//find all retorna uma implementação de página ai passamos nosso page configurado
+		Page<Usuario> list = usuarioRepository.findAll(page);
+		
+         //vai retorna uma página configurada do tipo usuários na lista
+		return new ResponseEntity<Page<Usuario>>(list, HttpStatus.OK);
+		
 	} 
 	
 
