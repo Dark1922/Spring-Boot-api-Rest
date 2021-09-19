@@ -259,6 +259,35 @@ public class IndexController {
 		return new ResponseEntity<Page<Usuario>>(list, HttpStatus.OK);
 	}
 	
+	/* END-POINT de consultar de usuário por nome */
+	@GetMapping("/buscarPorNome/{nome}/page/{page}")
+	@CacheEvict(value="listanome" ,allEntries = true )  
+	@CachePut("listanome")
+	public ResponseEntity<Page<Usuario>> buscarPorNomePage(@PathVariable String nome, @PathVariable int page) 
+			throws InterruptedException {
+		
+		PageRequest pageRequest  = null;
+		Page<Usuario> list = null;
+				
+		/* não informou o nome e deixou vazio o campo de pesquisa, continua na paginação*/
+		if(nome == null || (nome != null && nome.trim().isEmpty())
+			|| nome.equalsIgnoreCase("undefined")) {
+			
+			pageRequest = PageRequest.of(page, 5, Sort.by("nome"));
+			 list = usuarioRepository.findAll(pageRequest);
+		
+			/*Informou o nome e faz o método de consulta por paginação*/
+		}else {
+			pageRequest = PageRequest.of(page, 5, Sort.by("nome"));
+			list = usuarioRepository.findUserByNamePage(nome, pageRequest);
+			
+		}		
+		//método de consulta sem paginação
+		//List<Usuario> list = usuarioRepository.findByNome(nome.trim().toUpperCase());
+		
+		return new ResponseEntity<Page<Usuario>>(list, HttpStatus.OK);
+	}
+	
 	/* END-POINT de deletar telefones por id */
 	@DeleteMapping("/removerTelefone/{id}")
 	public ResponseEntity<Void> deleteTelefone(@PathVariable Long id) {
