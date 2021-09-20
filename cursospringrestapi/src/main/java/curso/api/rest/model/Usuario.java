@@ -2,6 +2,7 @@ package curso.api.rest.model;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -16,15 +17,19 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.br.CPF;
-import org.springframework.security.core.GrantedAuthority;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.DateTimeFormat.ISO;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.EqualsAndHashCode;
@@ -44,23 +49,29 @@ public class Usuario  implements UserDetails{ //ja tem o serializable e os metod
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	
-	@NotBlank(message = "Infome um login")
+	@NotBlank(message = "Infome um login.")
 	@Size(max = 60, min = 4)
 	@Column(unique = true) //login é único
 	private String login;
 	
-	@NotBlank(message = "Infome uma senha")
+	@NotBlank(message = "Infome uma senha.")
 	@Size(max = 150, min = 6)
 	@Column(name = "senha")
 	private String password;
 	 
 	@NotBlank
-	@CPF(message = "Informe um Cpf válido")
+	@CPF(message = "Informe um Cpf válido.")
 	private String cpf;
 	
-	@NotBlank(message = "Infome um Nome")
+	@NotBlank(message = "Infome um Nome.")
 	@Size(max = 255)
 	private String nome;
+	
+	@JsonFormat(pattern = "dd/MM/yyyy") //devolve os dados para tela nesse formato
+	@Temporal(TemporalType.DATE) //ou data
+	@DateTimeFormat(iso = ISO.DATE, pattern = "dd/MM/yyyy")
+	@NotBlank(message = "data de nascimento é obrigatório.")
+	private Date dataNascimento;
 	
 	/*
 	@NotBlank
