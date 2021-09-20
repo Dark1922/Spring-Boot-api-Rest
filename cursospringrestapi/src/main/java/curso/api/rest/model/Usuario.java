@@ -102,7 +102,7 @@ public class Usuario  implements UserDetails{ //ja tem o serializable e os metod
 	//autorizações são os acessos do usuario ROLE_ADMIN GERENTE etc
     @Override
     @JsonIgnore
-	public Collection<? extends GrantedAuthority> getAuthorities() {
+	public Collection<Role> getAuthorities() {
 		return roles;
 	}
 

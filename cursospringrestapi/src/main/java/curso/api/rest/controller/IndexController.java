@@ -1,6 +1,5 @@
 package curso.api.rest.controller;
 
-import java.util.List;
 import java.util.Optional;
 
 import javax.validation.Valid;
@@ -234,8 +233,7 @@ public class IndexController {
 	@GetMapping("/buscarPorNome/{nome}")
 	@CacheEvict(value="listanome" ,allEntries = true )  
 	@CachePut("listanome")
-	public ResponseEntity<Page<Usuario>> buscarPorNome(@PathVariable String nome) 
-			throws InterruptedException {
+	public ResponseEntity<Page<Usuario>> buscarPorNome(@PathVariable("nome") String nome) throws InterruptedException {
 		
 		PageRequest pageRequest  = null;
 		Page<Usuario> list = null;
@@ -263,8 +261,9 @@ public class IndexController {
 	@GetMapping("/buscarPorNome/{nome}/page/{page}")
 	@CacheEvict(value="listanome" ,allEntries = true )  
 	@CachePut("listanome")
-	public ResponseEntity<Page<Usuario>> buscarPorNomePage(@PathVariable String nome, @PathVariable int page) 
-			throws InterruptedException {
+	public ResponseEntity<Page<Usuario>> buscarPorNomePage(@PathVariable("nome") String nome,
+			@PathVariable("page") int page) throws InterruptedException {
+			
 		
 		PageRequest pageRequest  = null;
 		Page<Usuario> list = null;

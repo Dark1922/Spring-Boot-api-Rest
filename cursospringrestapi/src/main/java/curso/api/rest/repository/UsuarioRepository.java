@@ -2,7 +2,6 @@ package curso.api.rest.repository;
 
 import java.util.List;
 
-import javax.transaction.Transactional;
 
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
@@ -12,6 +11,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import curso.api.rest.model.Usuario;
 
@@ -40,7 +40,7 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
 	
 	@Modifying
 	@Query(nativeQuery = true , value = "insert into usuarios_role (usuario_id, role_id)"
-			+ "	values(?1, (select id from role where nome_role = 'ADMIN_ROLE'))")
+			+ "	values(?1, (select id from role where nome_role = 'ROLE_USER'))")
 	void insereAcessoRolePadrao(Long id);
 
 	default Page<Usuario> findUserByNamePage(String nome, PageRequest pageRequest) {
@@ -56,8 +56,6 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
 		Example<Usuario> example = Example.of(usuario, exampleMatcher);
 		
 		/*Toda configuração de paginação e também de consulta*/
-		Page<Usuario> retorno = findAll(example,pageRequest);
-		
-		return retorno; //retorno que veio da consulta
+		return findAll(example, pageRequest); //retorno que veio da consulta						
 	}
 }
