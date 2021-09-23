@@ -16,6 +16,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -88,6 +89,9 @@ public class Usuario  implements UserDetails{ //ja tem o serializable e os metod
 	@Size(max = 255)
 	@Column(unique = true)
 	private String email;
+	
+	@ManyToOne() //mts user para uma profissão	
+	private Profissao profissao;
 	
 	@JsonIgnore
 	private String token = "";
