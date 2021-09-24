@@ -21,6 +21,7 @@ public class UsuarioDTO implements Serializable {
 	private String userEmail;
 	private Date dataNascimento;
 	private List<Telefone> userTelefone;
+	private Profissao profissao;
 	
 	public UsuarioDTO(Usuario usuario) {
 
@@ -30,9 +31,10 @@ public class UsuarioDTO implements Serializable {
 		this.userEmail = usuario.getEmail();
 		this.userTelefone = usuario.getTelefones();
 		this.userId = usuario.getId();
-		this.userPassword = usuario.getPassword();
+		this.userPassword = usuario.getPassword(); 
 		this.userTelefone = usuario.getTelefones();
 		this.dataNascimento = usuario.getDataNascimento();
+		this.profissao = usuario.getProfissao();
 	}	
 
 }

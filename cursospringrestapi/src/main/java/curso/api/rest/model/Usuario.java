@@ -38,8 +38,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Getter
 @Setter
+@Getter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Usuario  implements UserDetails{ //ja tem o serializable e os metodos do springsecurity
 
