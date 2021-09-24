@@ -1,5 +1,6 @@
 package curso.api.rest.model;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -67,6 +68,8 @@ public class Usuario  implements UserDetails{ //ja tem o serializable e os metod
 	@NotBlank(message = "Infome um Nome.")
 	@Size(max = 255)
 	private String nome;
+	
+	private BigDecimal salario;
 	
 	@JsonFormat(timezone = "GMT-3",pattern = "dd/MM/yyyy") //devolve os dados para tela nesse formato
 	@Temporal(TemporalType.DATE) //tipo de formato que quer q salve no banco de dados

@@ -20,7 +20,7 @@ public class UsuarioDTO implements Serializable {
 	private String userCpf;
 	private String userEmail;
 	private Date dataNascimento;
-	private List<Telefone> userTelefone;
+	private List<Telefone> userTelefone; 
 	private Profissao profissao;
 	
 	public UsuarioDTO(Usuario usuario) {
