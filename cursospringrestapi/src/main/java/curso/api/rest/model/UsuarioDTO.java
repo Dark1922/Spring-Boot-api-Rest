@@ -1,6 +1,7 @@
 package curso.api.rest.model;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -19,9 +20,10 @@ public class UsuarioDTO implements Serializable {
 	private String userNome;
 	private String userCpf;
 	private String userEmail;
-	private Date dataNascimento;
+	private Date userDataNascimento;
 	private List<Telefone> userTelefone; 
-	private Profissao profissao;
+	private Profissao userProfissao;
+	private BigDecimal userSalario;
 	
 	public UsuarioDTO(Usuario usuario) {
 
@@ -33,8 +35,9 @@ public class UsuarioDTO implements Serializable {
 		this.userId = usuario.getId();
 		this.userPassword = usuario.getPassword(); 
 		this.userTelefone = usuario.getTelefones();
-		this.dataNascimento = usuario.getDataNascimento();
-		this.profissao = usuario.getProfissao();
+		this.userDataNascimento = usuario.getDataNascimento();
+		this.userProfissao = usuario.getProfissao();
+		this.userSalario = usuario.getSalario();
 	}	
 
 }
