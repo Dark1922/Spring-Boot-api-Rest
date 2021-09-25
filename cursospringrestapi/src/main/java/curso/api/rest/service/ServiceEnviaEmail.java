@@ -5,11 +5,9 @@ import java.util.Properties;
 import javax.mail.Address;
 import javax.mail.Authenticator;
 import javax.mail.Message;
-import javax.mail.MessagingException;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Transport;
-import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
@@ -19,13 +17,14 @@ import org.springframework.stereotype.Service;
 public class ServiceEnviaEmail {
 	
 	private String userName = "jvdematos005@gmail.com";
-	private String senha = "senhaEmail";
+	private String senha = "84353246mv";
 
 	public void enviarEmail(String assunto, String emailDestino, String mensagem) throws Exception {
 		
 /* Propriedades para enviar para o gmail para apartir do meu email , enviar o email d
- * e recuperar senha para email do usuario*/
+ * e recuperar senha para email do usuario*/ 
 		Properties properties = new Properties();
+		properties.put("mail.smtp.ssl.trust", "*");
 		properties.put("mail.smtp.auth", "true"); /*Autorização*/
 		properties.put("mail.smtp.starttls", "true");/*Autenticação*/
 		properties.put("mail.smtp.host", "smtp.gmail.com");/*Servidor google gmail*/

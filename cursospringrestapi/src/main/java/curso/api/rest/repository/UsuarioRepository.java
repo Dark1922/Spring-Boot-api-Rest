@@ -19,6 +19,10 @@ import curso.api.rest.model.Usuario;
 @Transactional
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
 
+	@Modifying
+	@Query(value = "update usuario set senha = ?1 where id = ?2", nativeQuery = true)
+	void updateSenha(String senha, Long id);
+	
 	@Query("select u from Usuario u where u.login = ?1")
 	Usuario findByLogin(String login);
     

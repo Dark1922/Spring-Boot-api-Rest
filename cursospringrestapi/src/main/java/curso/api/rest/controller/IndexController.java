@@ -36,6 +36,7 @@ import lombok.AllArgsConstructor;
 public class IndexController {
 
 	// se fosse cdi @Inject
+	
 	private UsuarioRepository usuarioRepository;
 	
 	private ImplementacaoUserDetailsService implementacaoUserDetailsService;
