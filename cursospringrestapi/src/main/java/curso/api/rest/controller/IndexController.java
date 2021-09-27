@@ -2,8 +2,10 @@ package curso.api.rest.controller;
 
 import java.util.Optional;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.data.domain.Page;
@@ -27,6 +29,7 @@ import curso.api.rest.model.UsuarioDTO;
 import curso.api.rest.repository.TelefoneRepository;
 import curso.api.rest.repository.UsuarioRepository;
 import curso.api.rest.service.ImplementacaoUserDetailsService;
+import curso.api.rest.service.ServiceRelatorio;
 import lombok.AllArgsConstructor;
 
 @Controller // arquitetura rest
@@ -42,6 +45,8 @@ public class IndexController {
 	private ImplementacaoUserDetailsService implementacaoUserDetailsService;
 	
 	private TelefoneRepository telefoneRepository;
+	
+	private ServiceRelatorio serviceRelatorio;
 	
 
 	// serviços restfull  Métodos Buscar por Todos
@@ -81,7 +86,7 @@ public class IndexController {
 
 	/*               Métodos de Get buscar por id             */
 	
-	@GetMapping(value = "/oi/{id}", produces = "application/json")
+	@GetMapping(value = "/{id}", produces = "application/json")
 	@CacheEvict(value="buscarusers" ,allEntries = true )  
 	@CachePut("buscarusers")
 	public ResponseEntity<Usuario> buscarPorId(@PathVariable Long id) {
@@ -94,7 +99,7 @@ public class IndexController {
 
 
 		
-	@GetMapping(value = "/{id}")
+	@GetMapping(value = "oi/{id}")
 	public ResponseEntity<UsuarioDTO> poridAlex(@PathVariable Long id) {
 
 		// retorna optional
@@ -299,6 +304,23 @@ public class IndexController {
 		telefoneRepository.deleteById(id);
 		
 		return ResponseEntity.noContent().build();
+	}
+	
+	/*Endpoint Relatório - dowload*/
+	@GetMapping("/relatorio") //obter um relatório
+	public ResponseEntity<String> dowloadRelatorio(HttpServletRequest request) throws Exception {
+		
+		/*nome dinâmico do relatorio que queremos , getServletContext pra carregar onde ele está contexto*/
+		byte[] pdf = serviceRelatorio.gerarRelatorio("relatorio-usuario", 
+				request.getServletContext());
+		
+		/*base 63 que fica pronta para ser impressa e processadaem qlq lugar*/
+		String base64Pdf = "data:application/pdf;base64," + Base64.encodeBase64String(pdf);
+		
+		return new ResponseEntity<String>(base64Pdf,HttpStatus.OK);
+		
+		
+		
 	}
 	
 }

@@ -38,6 +38,10 @@ public class ServiceRelatorio implements Serializable {
 				new HashedMap(), connection);
 		
 		/*Exporta para byte Array o Pdf para fazer o dowload*/
-		return JasperExportManager.exportReportToPdf(print);
+		byte[] retorno = JasperExportManager.exportReportToPdf(print);
+		
+		connection.close(); //fecha a conexão para evitar algum problema com a conexão
+		
+		return retorno; //ai pega e retorna certinho o nosso pdf e fecha  a conexão q foi usada pelo relatorio
 	}
 }
