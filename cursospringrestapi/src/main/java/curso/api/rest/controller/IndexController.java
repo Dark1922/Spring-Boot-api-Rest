@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import curso.api.rest.model.Usuario;
 import curso.api.rest.model.UsuarioDTO;
+import curso.api.rest.model.userReport;
 import curso.api.rest.repository.TelefoneRepository;
 import curso.api.rest.repository.UsuarioRepository;
 import curso.api.rest.service.ImplementacaoUserDetailsService;
@@ -319,7 +320,21 @@ public class IndexController {
 		
 		return new ResponseEntity<String>(base64Pdf,HttpStatus.OK);
 		
+	}
+	
+	@PostMapping("/relatorio/") //envio de dados
+	public ResponseEntity<String> dowloadRelatorioParam(HttpServletRequest 
+			request, @RequestBody userReport userReport) throws Exception {
+		/*userReport e os dados que vai vir da tela data inicio e fim*/
 		
+		/*nome dinâmico do relatorio que queremos , getServletContext pra carregar onde ele está contexto*/
+		byte[] pdf = serviceRelatorio.gerarRelatorio("relatorio-usuario", 
+				request.getServletContext());
+		
+		/*base 63 que fica pronta para ser impressa e processadaem qlq lugar*/
+		String base64Pdf = "data:application/pdf;base64," + Base64.encodeBase64String(pdf);
+		
+		return new ResponseEntity<String>(base64Pdf,HttpStatus.OK);
 		
 	}
 	
