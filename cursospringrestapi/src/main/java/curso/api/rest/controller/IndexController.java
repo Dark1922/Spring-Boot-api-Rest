@@ -1,5 +1,8 @@
 package curso.api.rest.controller;
 
+import java.text.SimpleDateFormat;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
@@ -312,7 +315,7 @@ public class IndexController {
 	public ResponseEntity<String> dowloadRelatorio(HttpServletRequest request) throws Exception {
 		
 		/*nome dinâmico do relatorio que queremos , getServletContext pra carregar onde ele está contexto*/
-		byte[] pdf = serviceRelatorio.gerarRelatorio("relatorio-usuario", 
+		byte[] pdf = serviceRelatorio.gerarRelatorio("relatorio-usuario", new HashMap(),
 				request.getServletContext());
 		
 		/*base 63 que fica pronta para ser impressa e processadaem qlq lugar*/
@@ -327,8 +330,25 @@ public class IndexController {
 			request, @RequestBody userReport userReport) throws Exception {
 		/*userReport e os dados que vai vir da tela data inicio e fim*/
 		
+		/*Formato que está vindo da tela */
+		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+		
+		/* converter para param pra buscar por parametro no relatório*/
+		SimpleDateFormat dataFormatParam = new  SimpleDateFormat("yyyy-MM-dd");
+		
+		/*Faz a formatação da data*/
+		String dataInicio = dataFormatParam.format(dateFormat.parse(userReport.getDataInicio()));
+		
+		String dataFim = dataFormatParam.format(dateFormat.parse(userReport.getDataFim()));
+		
+		Map<String, Object> params = new HashMap<String, Object>();
+		
+		/*parametros do relátorio passando as data que veio pelo usuário*/
+		params.put("DATA_INICIO", dataInicio);
+		params.put("DATA_FIM", dataFim);
+		
 		/*nome dinâmico do relatorio que queremos , getServletContext pra carregar onde ele está contexto*/
-		byte[] pdf = serviceRelatorio.gerarRelatorio("relatorio-usuario", 
+		byte[] pdf = serviceRelatorio.gerarRelatorio("relatorio-usuario-param", params,
 				request.getServletContext());
 		
 		/*base 63 que fica pronta para ser impressa e processadaem qlq lugar*/

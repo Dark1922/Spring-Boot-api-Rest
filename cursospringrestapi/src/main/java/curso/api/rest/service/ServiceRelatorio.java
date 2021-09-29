@@ -3,10 +3,10 @@ package curso.api.rest.service;
 import java.io.File;
 import java.io.Serializable;
 import java.sql.Connection;
+import java.util.Map;
 
 import javax.servlet.ServletContext;
 
-import org.apache.commons.collections4.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
@@ -23,8 +23,8 @@ public class ServiceRelatorio implements Serializable {
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
 	
-	/*Método que dá uma rebosta de byte array , mostra o pdf direto*/
-	public byte[] gerarRelatorio(String nomeRelatorio, ServletContext servletContext) throws Exception {
+	/*Método que dá uma rebosta de byte array , mostra o pdf direto , e vai receber parametros no relátorio*/
+	public byte[] gerarRelatorio(String nomeRelatorio, Map<String,Object> params, ServletContext servletContext) throws Exception {
 		
 		/*Obter conexão com banco de dados*/
 		Connection connection = jdbcTemplate.getDataSource().getConnection();
@@ -35,7 +35,7 @@ public class ServiceRelatorio implements Serializable {
 		
 		/*Gerar o Relatorio com os dados e conexão*/
 		JasperPrint print = JasperFillManager.fillReport(caminhoJasper,
-				new HashedMap(), connection);
+				 params, connection);
 		
 		/*Exporta para byte Array o Pdf para fazer o dowload*/
 		byte[] retorno = JasperExportManager.exportReportToPdf(print);
