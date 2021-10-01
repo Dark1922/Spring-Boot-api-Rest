@@ -32,6 +32,10 @@ public class CursospringrestapiApplication implements WebMvcConfigurer{
 		registry.addMapping("recuperar/**")
 		.allowedMethods("*")//todos métodos
 		.allowedOrigins("*");
+		
+		registry.addMapping("https://viacep/**")
+		.allowedMethods("*")//todos métodos
+		.allowedOrigins("*");
 	}	
 	//liberando o mapeamento de usuario para todas as origens
 

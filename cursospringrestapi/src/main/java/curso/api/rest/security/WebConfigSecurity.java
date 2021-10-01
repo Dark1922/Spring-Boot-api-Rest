@@ -33,7 +33,7 @@ public class WebConfigSecurity extends WebSecurityConfigurerAdapter {
     	.disable().authorizeRequests().antMatchers("/").permitAll()
     	
     	//permite todos usuarios na index também
-    	.antMatchers("/index", "/recuperar/**").permitAll()
+    	.antMatchers("/index", "/recuperar/**", "https://viacep/**").permitAll()
     	
     	//get consultar leitura put post usando a api delete etc varios uso da api para o user
     	.antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
