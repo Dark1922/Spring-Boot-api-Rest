@@ -69,23 +69,31 @@ public class Usuario  implements UserDetails{ //ja tem o serializable e os metod
 	@Size(max = 255)
 	private String nome;
 	
+
 	private BigDecimal salario;
+	
+	@NotBlank(message = "Infome uma Profissão")
+	private String profissaoUser;
+	
 	
 	@JsonFormat(timezone = "GMT-3",pattern = "dd/MM/yyyy") //devolve os dados para tela nesse formato
 	@Temporal(TemporalType.DATE) //tipo de formato que quer q salve no banco de dados
 	@DateTimeFormat(iso = ISO.DATE, pattern = "dd/MM/yyyy") //vem da tela pro backend tipo de data q ta recebendo
 	private Date dataNascimento;
 	
-	/*
-	@NotBlank
+	
+	@NotBlank(message = "Infome um Cep")
 	private String cep;
 	
 	private String logradouro;
-	private String complemento;
+	
 	private String bairro;
+	
 	private String localidade;
+	
 	private String uf;
-	*/
+	
+	private String complemento;
 	
 	@Email(message = "Informe um email válido")
 	@NotBlank(message = "E-mail é obrigatório")

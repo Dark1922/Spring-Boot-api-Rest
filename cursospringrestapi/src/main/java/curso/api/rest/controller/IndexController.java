@@ -1,5 +1,10 @@
 package curso.api.rest.controller;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.net.URLConnection;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
@@ -28,6 +33,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.google.gson.Gson;
 
 import curso.api.rest.model.UserChart;
 import curso.api.rest.model.Usuario;
@@ -197,7 +204,7 @@ public class IndexController {
 			usuario.setPassword(senhaCriptografada);
 		}
 		
-		/*
+		
 		// consumindo api publica externa 
 				URL url = new URL("https://viacep.com.br/ws/"+usuario.getCep()+"/json/");
 				URLConnection connection = url.openConnection(); //abre a conexão
@@ -221,7 +228,7 @@ public class IndexController {
 				usuario.setBairro(userAux.getBairro());
 				usuario.setLocalidade(userAux.getLocalidade());
 				usuario.setUf(userAux.getUf());
-*/
+
 		Usuario UsuarioAtualizar= usuarioRepository.save(usuario);
 
 		return 	ResponseEntity.ok(UsuarioAtualizar);
@@ -368,21 +375,20 @@ public class IndexController {
 		UserChart userChart = new UserChart();
 		
 		/*Retorna duas lista 1 lista dos nome 2 lista com os salários */
-    List<String> resultado = jdbcTemplate.queryForList("select array_agg('''' || nome ||'''' ) from usuario where salario >"
+    List<String> resultado = jdbcTemplate.queryForList("select array_agg(nome) from usuario where salario >"
 			+ " 0 and nome <> '' union all select cast(array_agg(salario) as character varying[]) from usuario "
 			+ " where salario > 0 and nome <> ''", String.class);
 		
 		if(!resultado.isEmpty()) {
 			/*vai remover as chaves por vázios pq temos que ter uma array n um objeto na posição 0*/
-			String nomes = resultado.get(0).replaceAll("\\{", "").replaceAll("\\}", "");
-			String salarios = resultado.get(1).replaceAll("\\{", "").replaceAll("\\}", "");
+			String nome = resultado.get(0).replaceAll("\\{", "").replaceAll("\\}", "");
+			String salario = resultado.get(1).replaceAll("\\{", "").replaceAll("\\}", "");
 			
-			userChart.setNome(nomes);
-			userChart.setSalario(salarios);
+			userChart.setNome(nome);
+			userChart.setSalario(salario);
 			
 		}
 				
-		
 		return new ResponseEntity<UserChart>(userChart, HttpStatus.OK);
 	}
 	

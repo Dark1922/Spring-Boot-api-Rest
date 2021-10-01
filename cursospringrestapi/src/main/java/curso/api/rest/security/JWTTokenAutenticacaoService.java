@@ -22,7 +22,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 public class JWTTokenAutenticacaoService {
 
 	//tempo de validade do token coloquei o tempo de 1 dia em milisegundos
-	 private static final long EXPIRATION_TIME = 86400000;
+	 private static final long EXPIRATION_TIME = 864000000;
 	 
 	 //uma senha única para compor a autenticação e ajudar na segurança
 	 private static final String SECRET = "*SenhaExtremamenteSecreta";
@@ -118,6 +118,7 @@ public class JWTTokenAutenticacaoService {
 			 try {
 				response.getOutputStream().print("Seu TOKEN está expirado, "
 				 		+ "faça o login ou informe um novo TOKEN para AUTENTICACÃO.");
+				liberacaoCors(response);
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
@@ -137,8 +138,8 @@ public class JWTTokenAutenticacaoService {
 			response.addHeader("Access-Control-Allow-Headers", "*");
 		}
 		
-		if(response.getHeader("Access-Contro-Request-Headers") == null) {
-			response.addHeader("Access-Contro-Request-Headers", "*");
+		if(response.getHeader("Access-Control-Request-Headers") == null) {
+			response.addHeader("Access-Control-Request-Headers", "*");
 		}
 		
 		if(response.getHeader("Access-Control-Allow-Methods") == null) {
